@@ -108,6 +108,12 @@ public class practise {
             if(response != null && response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 entity = response.getEntity();
                 in = entity.getContent();
+                //System.out.println(in.hashCode());
+                //通过下面的hashCode可以看出同一个HttpEntity获取的输入流对象时同一个
+                /*System.out.println(in.hashCode());
+                in = entity.getContent();
+                System.out.println(in.hashCode());*/
+                //System.out.println(in.available());
                 byte[] bytes = new byte[1024];
                 int length = -1;
                 StringBuffer sb = new StringBuffer();
@@ -116,7 +122,14 @@ public class practise {
                     sb.append(new String(bytes, "utf-8"));
                 }
                 System.out.println("sb = " + sb.toString());
+                //System.out.println(in.available());     //返回0，表示输入流已经被读完了
 
+                //需要重新获取才可以获取
+                response = httpClient.execute(httpGet);
+                entity = response.getEntity();
+                in = entity.getContent();
+                //System.out.println(in.hashCode());
+                System.out.println(in.available());     //返回0，表示输入流没有可读的内容了
                 //下面的代码读不出内容，因为上面已经将in这个输入流读完了
                 StringBuffer sb2 = new StringBuffer();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
