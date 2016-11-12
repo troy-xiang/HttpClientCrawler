@@ -16,9 +16,11 @@ import java.io.*;
 public class DownloadUtils {
     public static String get(String url) throws IOException {
         String filename = "";
-        String realUrl = "http://".concat(url);
+        if(!url.contains("http://")) {
+            url = "http://".concat(url);
+        }
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet(realUrl);
+        HttpGet httpGet = new HttpGet(url);
         CloseableHttpResponse response = httpClient.execute(httpGet);
         if(response != null && response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
             System.out.println(response.getStatusLine());

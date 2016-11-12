@@ -10,8 +10,10 @@ public class TestDownloadBaiduLogo {
     public static void main(String[] args) {
         //获取http://www.baidu.com 站点上的所有内容
         String content = HttpGetUtils.get("http://www.baidu.com");
+        //String content = HttpGetUtils.get("http://news.ifeng.com/a/20161112/50245161_0.shtml");
         //定义正则表达式
         String regexStr = "hidefocus.+?src=//(.+?) width";
+        //String regexStr = "<body><img src=\"(.+?)\" style";
         //将从http://www.baidu.com 上获取的内容进行正则过滤，得到所需内容的请求网址
         String url = RegexStringUtils.regexString(regexStr, content);
         try {
