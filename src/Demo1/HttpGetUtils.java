@@ -16,6 +16,7 @@ import java.io.UnsupportedEncodingException;
 /**
  * HttpClientCrawler
  * Created by xiangbo on 2016/11/12 11:01.
+ * 该类用来获取HttpClient对象，并使用get方式获得请求，并对请求进行处理
  */
 public class HttpGetUtils {
     public static String get(String url) {
