@@ -1,18 +1,16 @@
 package Demo1;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.CookieHandler;
+import java.io.*;
 import java.net.URI;
 
 import org.apache.http.*;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.cookie.Cookie;
+import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.entity.ContentType;
+import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -154,4 +152,55 @@ public class practise {
             }
         }
     }
+
+    @Test
+    public void test7() throws IOException {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpGet httpGet = new HttpGet("http://www.ecnu.edu.cn");
+        CloseableHttpResponse response = httpClient.execute(httpGet);
+        HttpEntity entity = response.getEntity();
+        if(entity.getContentLength() != -1 && entity.getContentLength() < 1024) {
+            System.out.println(EntityUtils.toString(entity));
+            System.out.println(new String(EntityUtils.toByteArray(entity), "utf-8"));
+        } else{
+            InputStream in = entity.getContent();
+            /*byte[] bytes = new byte[1024];
+            int length = -1;
+            StringBuffer stringBuffer = new StringBuffer();
+            while((length = in.read(bytes)) != -1) {
+                stringBuffer.append(new String(bytes, "utf-8"));
+            }
+            System.out.println(stringBuffer.toString());*/
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
+            String line = null;
+            StringBuffer stringBuffer = new StringBuffer();
+            while((line = reader.readLine()) != null) {
+                stringBuffer.append(line);
+            }
+            System.out.println(stringBuffer.toString());
+        }
+        response.close();
+    }
+
+    @Test
+    public void test8() throws IOException {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpGet httpGet = new HttpGet("http://www.ecnu.edu.cn");
+        CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
+        HttpEntity entity = httpResponse.getEntity();
+        if(entity != null) {
+            entity = new BufferedHttpEntity(entity);
+            System.out.println(entity.getContentLength());
+        }
+    }
+
+    @Test
+    public void test9() {
+        File file = new File("E:/1.txt");
+        FileEntity entity = new FileEntity(file, ContentType.create("text/html", "utf-8"));
+        HttpPost httpPost = new HttpPost("http://www.ecnu.edu.cn");
+        httpPost.setEntity(entity);
+    }
+
+
 }
